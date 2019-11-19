@@ -260,29 +260,79 @@ public class Interface extends javax.swing.JFrame {
     }
     
     private void HelixExtraction(){
-        for(int i=0; i<Input.length-1; i++){
+        for (int i=0; i<Input.length-1; i++){
             if ("HELIX ".equals(RecordType(Input[i]))){
                 int initSeqNum = Integer.parseint(Input[i].substring(21,25));
                 int endSeqNum = Integer.parseint(Input[i].substring(33,37));
                 HelixCenter(initSeqNum, endSeqNum);
             }
         }
+        OutputTextArea.append("END   " + "\n");
     }
     
-    private String RecordType(String Record){
-        String recordType = Record.substring(0,6);
+    private void HelixCenter(int initSeqNum, int endSeqNum){
+        int j = 0;
+        double x = 0;
+        double y = 0;
+        double z = 0;
+        for (int i=0; i<Input.length-1; i++){
+            if ("ATOM  ".equals(RecordType(Input[i]))){
+                int resSeq = ResSeq(Input[i]);
+                if (resSeq >= initSeqNum && resSeq <= endSeqNum){
+                    if (" CA ".equals(AtomName(Input[i]))){
+                        j++;
+                        x = x + XCoord(Input[i]);
+                        y = y + YCoord(Input[i]);
+                        z = z + ZCoord(Input[i]);
+                        if (j == 4){
+                            x = x/j;
+                            y = y/j;
+                            z = z/j;
+                            Output(Input[i], x, y, z);
+                            j = 0;
+                            x = 0;
+                            y = 0;
+                            z = 0;
+                        }
+                    }
+                }
+                if (resSeq > endSeqNum){
+                    if (j > 0){
+                        x = x/j;
+                        y = y/j;
+                        z = z/j;
+                        Output(Input[i-1], x, y, z);
+                    }
+                    break;
+                }
+            }
+        }
+        OutputTextArea.append("TER   " + "\n");
+    }
+    
+    private void Output(String record, double x, double y, double z){
+        
+        OutputTextArea.append(record + "\n");
+    }
+    
+    private String RecordType(String record){
+        String recordType = record.substring(0,6);
         return recordType;
     }
     
-    private String AtomName(String Record){
-        String atomName = Record.substring(12,16);
+    private String AtomName(String record){
+        String atomName = record.substring(12,16);
         return atomName;
     }    
     
-    private String ChainID(String Record){
-        String chainID = Record.substring(21, 22);
+    private String ChainID(String record){
+        String chainID = record.substring(21, 22);
         return chainID;
     }    
+    
+    private int ResSeq(String record){
+        String resSeq = record.substring(22, 26);
+        return resSeq;
     
     /**
      * @param args the command line arguments
