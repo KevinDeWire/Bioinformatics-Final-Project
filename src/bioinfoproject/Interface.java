@@ -311,8 +311,16 @@ public class Interface extends javax.swing.JFrame {
     }
     
     private void Output(String record, double x, double y, double z){
-        
-        OutputTextArea.append(record + "\n");
+        String xCoord = String.format("%8.3f",x);
+        String yCoord = String.format("%8.3f",y);
+        String zCoord = String.format("%8.3f",z);
+        StringBuilder newRecord = new StringBuilder(record);
+        newRecord.replace(12, 16, "  S ");
+        newRecord.replace(17, 20, "   ");
+        newRecord.replace(30, 38, xCoord);
+        newRecord.replace(38, 46, yCoord);
+        newRecord.replace(46, 54, zCoord);
+        OutputTextArea.append(newRecord + "\n");
     }
     
     private String RecordType(String record){
