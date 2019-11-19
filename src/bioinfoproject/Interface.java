@@ -217,6 +217,25 @@ public class Interface extends javax.swing.JFrame {
 
     private void HelixCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelixCenterActionPerformed
         // This secion allows the user to set the file that the Helix Centerline will be saved
+        BufferedWriter writer;
+        int returnVal = FileChooser.showSaveDialog(this);
+            if (returnVal == FileChooser.APPROVE_OPTION) {
+                File OutputFile = FileChooser.getSelectedFile();                
+                DisableButtons();
+                OutputTextArea.setText("");
+                HelixExtraction();
+                try {
+                  writer = new BufferedWriter( new FileWriter( OutputFile.getAbsolutePath(), false ));
+                  OutputTextArea.write( writer );
+                  writer.close();
+                } catch (IOException ex) {
+                  System.
+                          out.println("problem accessing file"+OutputFile.getAbsolutePath());
+                }
+            } else {
+                System.out.println("File access cancelled by user.");
+            }
+            EnableButtons();
     }//GEN-LAST:event_HelixCenterActionPerformed
 
     private void DisableButtons(){
@@ -238,6 +257,16 @@ public class Interface extends javax.swing.JFrame {
             }
         }
         OutputTextArea.append("END   " + "\n");
+    }
+    
+    private void HelixExtraction(){
+        for(int i=0; i<Input.length-1; i++){
+            if ("HELIX ".equals(RecordType(Input[i]))){
+                int initSeqNum = Integer.parseint(Input[i].substring(21,25));
+                int endSeqNum = Integer.parseint(Input[i].substring(33,37));
+                HelixCenter(initSeqNum, endSeqNum);
+            }
+        }
     }
     
     private String RecordType(String Record){
