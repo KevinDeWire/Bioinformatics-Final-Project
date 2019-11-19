@@ -45,8 +45,14 @@ public class Interface extends javax.swing.JFrame {
 
         FileChooser = new javax.swing.JFileChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TextArea = new javax.swing.JTextArea();
-        SaveButton = new javax.swing.JButton();
+        InputTextArea = new javax.swing.JTextArea();
+        caExtract = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        OutputTextArea = new javax.swing.JTextArea();
+        bSheetCenter = new javax.swing.JButton();
+        HelixCenter = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         Open = new javax.swing.JMenuItem();
@@ -57,16 +63,42 @@ public class Interface extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        TextArea.setColumns(20);
-        TextArea.setRows(5);
-        jScrollPane1.setViewportView(TextArea);
+        InputTextArea.setEditable(false);
+        InputTextArea.setColumns(40);
+        InputTextArea.setRows(5);
+        jScrollPane1.setViewportView(InputTextArea);
 
-        SaveButton.setText("Save Button");
-        SaveButton.addActionListener(new java.awt.event.ActionListener() {
+        caExtract.setText("Extract CA Atoms");
+        caExtract.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SaveButtonActionPerformed(evt);
+                caExtractActionPerformed(evt);
             }
         });
+
+        OutputTextArea.setEditable(false);
+        OutputTextArea.setColumns(40);
+        OutputTextArea.setRows(5);
+        jScrollPane2.setViewportView(OutputTextArea);
+
+        bSheetCenter.setText("Extract B-Sheet");
+        bSheetCenter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSheetCenterActionPerformed(evt);
+            }
+        });
+
+        HelixCenter.setText("Extract Helix");
+        HelixCenter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HelixCenterActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel1.setText("Input File");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setText("Output File");
 
         jMenu1.setText("File");
 
@@ -96,20 +128,38 @@ public class Interface extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SaveButton)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(caExtract, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bSheetCenter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(HelixCenter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(SaveButton)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE))
+                        .addComponent(caExtract, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(HelixCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(bSheetCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 212, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
         );
 
@@ -117,16 +167,18 @@ public class Interface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void OpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenActionPerformed
+        // This Section allows the user to pick the input file.
         int returnVal = FileChooser.showOpenDialog(this);
             if (returnVal == FileChooser.APPROVE_OPTION) {
                 File InputFile = FileChooser.getSelectedFile();
                 try {
                   // What to do with the file, e.g. display it in a TextArea
-                  TextArea.read( new FileReader( InputFile.getAbsolutePath() ), null );
+                  InputTextArea.read( new FileReader( InputFile.getAbsolutePath() ), null );
                 } catch (IOException ex) {
                   System.
                           out.println("problem accessing file"+InputFile.getAbsolutePath());
                 }
+                Input = InputTextArea.getText().split("\n");
             } else {
                 System.out.println("File access cancelled by user.");
             }
@@ -136,14 +188,18 @@ public class Interface extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_ExitActionPerformed
 
-    private void SaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveButtonActionPerformed
+    private void caExtractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caExtractActionPerformed
+        // This section allows the user to set the file that the CA extraction will be saved.
         BufferedWriter writer;
         int returnVal = FileChooser.showSaveDialog(this);
             if (returnVal == FileChooser.APPROVE_OPTION) {
-                File OutputFile = FileChooser.getSelectedFile();
+                File OutputFile = FileChooser.getSelectedFile();                
+                DisableButtons();
+                OutputTextArea.setText("");
+                caExtraction();
                 try {
                   writer = new BufferedWriter( new FileWriter( OutputFile.getAbsolutePath(), false ));
-                  TextArea.write( writer );
+                  OutputTextArea.write( writer );
                   writer.close();
                 } catch (IOException ex) {
                   System.
@@ -152,8 +208,53 @@ public class Interface extends javax.swing.JFrame {
             } else {
                 System.out.println("File access cancelled by user.");
             }
-    }//GEN-LAST:event_SaveButtonActionPerformed
+            EnableButtons();
+    }//GEN-LAST:event_caExtractActionPerformed
 
+    private void bSheetCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSheetCenterActionPerformed
+        // This secion allows the user to set the file that the B-Sheet Centerline will be saved
+    }//GEN-LAST:event_bSheetCenterActionPerformed
+
+    private void HelixCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelixCenterActionPerformed
+        // This secion allows the user to set the file that the Helix Centerline will be saved
+    }//GEN-LAST:event_HelixCenterActionPerformed
+
+    private void DisableButtons(){
+        caExtract.setEnabled(false);
+        HelixCenter.setEnabled(false);
+        bSheetCenter.setEnabled(false);
+    }
+    
+    private void EnableButtons(){
+        caExtract.setEnabled(true);
+        HelixCenter.setEnabled(true);
+        bSheetCenter.setEnabled(true);
+    }
+    
+    private void caExtraction(){
+        for (int i=0; i<Input.length-1; i++){
+            if ("ATOM  ".equals(RecordType(Input[i])) && " CA ".equals(AtomName(Input[i])) && "A".equals(ChainID(Input[i]))){               
+                OutputTextArea.append(Input[i] + "\n");
+            }
+        }
+        OutputTextArea.append("END   " + "\n");
+    }
+    
+    private String RecordType(String Record){
+        String recordType = Record.substring(0,6);
+        return recordType;
+    }
+    
+    private String AtomName(String Record){
+        String atomName = Record.substring(12,16);
+        return atomName;
+    }    
+    
+    private String ChainID(String Record){
+        String chainID = Record.substring(21, 22);
+        return chainID;
+    }    
+    
     /**
      * @param args the command line arguments
      */
@@ -182,25 +283,28 @@ public class Interface extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Interface().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Interface().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Exit;
     private javax.swing.JFileChooser FileChooser;
+    private javax.swing.JButton HelixCenter;
+    private javax.swing.JTextArea InputTextArea;
     private javax.swing.JMenuItem Open;
-    private javax.swing.JButton SaveButton;
-    private javax.swing.JTextArea TextArea;
+    private javax.swing.JTextArea OutputTextArea;
+    private javax.swing.JButton bSheetCenter;
+    private javax.swing.JButton caExtract;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 
     // Global Variables
-    public String Input;
-    public String Output;
+    public String[] Input;
 }
