@@ -262,58 +262,72 @@ public class Interface extends javax.swing.JFrame {
     private void HelixExtraction(){
         for (int i=0; i<Input.length-1; i++){
             if ("HELIX ".equals(RecordType(Input[i]))){
-                int initSeqNum = Integer.parseint(Input[i].substring(21,25));
-                int endSeqNum = Integer.parseint(Input[i].substring(33,37));
-                HelixCenter(initSeqNum, endSeqNum);
+                int initSeqNum;
+                String initSeqNumStr = Input[i].substring(21,25).replace(" ","");
+                initSeqNum = Integer.parseInt(initSeqNumStr);
+                int endSeqNum;
+                String endSeqNumStr = Input[i].substring(33,37).replace(" ","");
+                endSeqNum = Integer.parseInt(endSeqNumStr);
+                String initChainID = InitChainID(Input[i]);
+                HelixCenter(initChainID, initSeqNum, endSeqNum);
             }
         }
         OutputTextArea.append("END   " + "\n");
     }
     
-    private void HelixCenter(int initSeqNum, int endSeqNum){
+    private void HelixCenter(String initChainID, int initSeqNum, int endSeqNum){
         int j = 0;
         double x = 0;
         double y = 0;
         double z = 0;
+        String chainID;
+        int resSeq;
         for (int i=0; i<Input.length-1; i++){
             if ("ATOM  ".equals(RecordType(Input[i]))){
-                int resSeq = ResSeq(Input[i]);
-                if (resSeq >= initSeqNum && resSeq <= endSeqNum){
-                    if (" CA ".equals(AtomName(Input[i]))){
-                        j++;
-                        x = x + XCoord(Input[i]);
-                        y = y + YCoord(Input[i]);
-                        z = z + ZCoord(Input[i]);
-                        if (j == 4){
+                chainID = ChainID(Input[i]);
+                if (chainID.equals(initChainID)){
+                    resSeq = ResSeq(Input[i]);
+                    if (resSeq >= initSeqNum && resSeq <= endSeqNum){
+                        if (" CA ".equals(AtomName(Input[i]))){
+                            j++;
+                            x = x + XCoord(Input[i]);
+                            y = y + YCoord(Input[i]);
+                            z = z + ZCoord(Input[i]);
+                            if (j == 4){
+                                x = x/j;
+                                y = y/j;
+                                z = z/j;
+                                Output(Input[i], x, y, z);
+                                j = 0;
+                                x = 0;
+                                y = 0;
+                                z = 0;
+                            }
+                        }
+                    }
+                    if (resSeq > endSeqNum){
+                        if (j > 0){
                             x = x/j;
                             y = y/j;
                             z = z/j;
-                            Output(Input[i], x, y, z);
-                            j = 0;
-                            x = 0;
-                            y = 0;
-                            z = 0;
+                            Output(Input[i-1], x, y, z);
                         }
-                    }
+                        break;
+                    } 
                 }
-                if (resSeq > endSeqNum){
-                    if (j > 0){
-                        x = x/j;
-                        y = y/j;
-                        z = z/j;
-                        Output(Input[i-1], x, y, z);
-                    }
-                    break;
-                }
+
             }
         }
         OutputTextArea.append("TER   " + "\n");
     }
     
     private void Output(String record, double x, double y, double z){
-        String xCoord = String.format("%8.3f",x);
-        String yCoord = String.format("%8.3f",y);
-        String zCoord = String.format("%8.3f",z);
+        String xCoord;
+        xCoord = String.format("%8.3f",x);
+        String yCoord;
+        yCoord = String.format("%8.3f",y);
+        String zCoord;
+        zCoord = String.format("%8.3f",z);
         StringBuilder newRecord = new StringBuilder(record);
         newRecord.replace(12, 16, "  S ");
         newRecord.replace(17, 20, "   ");
@@ -336,11 +350,40 @@ public class Interface extends javax.swing.JFrame {
     private String ChainID(String record){
         String chainID = record.substring(21, 22);
         return chainID;
-    }    
+    }  
+    
+    private String InitChainID(String record){
+        String initChainID = record.substring(19, 20);
+        return initChainID;
+    }
     
     private int ResSeq(String record){
-        String resSeq = record.substring(22, 26);
+        int resSeq;
+        String resSeqStr = record.substring(22, 26).replace(" ", "");
+        resSeq = Integer.parseInt(resSeqStr);
         return resSeq;
+    }
+        
+    private double XCoord(String record){
+        double xCoord;
+        String xCoordStr = record.substring(30, 38).replace(" ", "");
+        xCoord = Double.parseDouble(xCoordStr);
+        return xCoord;
+    }
+    
+    private double YCoord(String record){
+        double yCoord;
+        String yCoordStr = record.substring(38, 46).replace(" ", "");
+        yCoord = Double.parseDouble(yCoordStr);
+        return yCoord;
+    }
+    
+    private double ZCoord(String record){
+        double zCoord;
+        String zCoordStr = record.substring(46, 54).replace(" ", "");
+        zCoord = Double.parseDouble(zCoordStr);
+        return zCoord;
+    }
     
     /**
      * @param args the command line arguments
