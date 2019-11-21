@@ -305,10 +305,7 @@ public class Interface extends javax.swing.JFrame {
                                 j = j-1;
                                 if (k == numRec || resSeq == endSeqNum){
                                     k = 0;
-                                }                                
-                                //for (int k=0; k<numRec; k++){
-                                //    record[k] = "";
-                                //}
+                                }
                             }
                         }
                     }
