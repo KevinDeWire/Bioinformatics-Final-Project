@@ -276,10 +276,11 @@ public class Interface extends javax.swing.JFrame {
     }
     
     private void HelixCenter(String helixChainID, int initSeqNum, int endSeqNum){
-        int j = 0;
-        double x = 0;
-        double y = 0;
-        double z = 0;
+        int j = 0;      // Used to track when average calculation takes place
+        int k = 0;      // Tracks which record is currently being used
+        double x;
+        double y;
+        double z;
         String chainID;
         int resSeq;
         int numRec = 4; // This can be changed to increase or decrease the number elements used in calculation.
@@ -293,26 +294,30 @@ public class Interface extends javax.swing.JFrame {
                     resSeq = ResSeq(Input[i]);
                     if (resSeq >= initSeqNum && resSeq <= endSeqNum){
                         if (" CA ".equals(AtomName(Input[i]))){
-                            record[j] = input[i];
+                            record[k] = Input[i];
                             j++;
+                            k++;
                             if (j == numRec){
                                 x = AvgX(record, numRec);
                                 y = AvgY(record, numRec);
                                 z = AvgZ(record, numRec);
-                                Output(record[0], x, y, z);
-                                j = 0;
-                                for (int k=0; k<numRec; k++){
-                                    record[k] = "";
-                                }
+                                Output(record[k-1], x, y, z);
+                                j = j-1;
+                                if (k == numRec || resSeq == endSeqNum){
+                                    k = 0;
+                                }                                
+                                //for (int k=0; k<numRec; k++){
+                                //    record[k] = "";
+                                //}
                             }
                         }
                     }
                     if (resSeq > endSeqNum){
-                        if (j > 0){
+                        if (k > 0){
                             x = AvgX(record, numRec);
                             y = AvgY(record, numRec);
                             z = AvgZ(record, numRec);
-                            Output(record[0], x, y, z);
+                            Output(record[k], x, y, z);
                         }
                         break;
                     } 
@@ -349,14 +354,14 @@ public class Interface extends javax.swing.JFrame {
         double avgX = 0;
         int j = numRec;
         for (int i=0; i < numRec; i++){
-            if(record[i].isEmpty){
+            if(record[i].isEmpty()){
                 j = j-1;
             }
             else{
                 avgX = avgX + XCoord(record[i]);
             }
         }
-        avgX = avgX/j
+        avgX = avgX/j;
         return avgX;
     }
     
@@ -364,14 +369,14 @@ public class Interface extends javax.swing.JFrame {
         double avgY = 0;
         int j = numRec;
         for (int i=0; i < numRec; i++){
-            if(record[i].isEmpty){
+            if(record[i].isEmpty()){
                 j = j-1;
             }
             else{
                 avgY = avgY + YCoord(record[i]);
             }
         }
-        avgY = avgY/j
+        avgY = avgY/j;
         return avgY;
     }
     
@@ -379,14 +384,14 @@ public class Interface extends javax.swing.JFrame {
         double avgZ = 0;
         int j = numRec;
         for (int i=0; i < numRec; i++){
-            if(record[i].isEmpty){
+            if(record[i].isEmpty()){
                 j = j-1;
             }
             else{
                 avgZ = avgZ + ZCoord(record[i]);
             }
         }
-        avgZ = avgZ/j
+        avgZ = avgZ/j;
         return avgZ;
     }
         
