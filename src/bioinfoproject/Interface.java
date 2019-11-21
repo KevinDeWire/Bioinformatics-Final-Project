@@ -213,6 +213,25 @@ public class Interface extends javax.swing.JFrame {
 
     private void bSheetCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSheetCenterActionPerformed
         // This secion allows the user to set the file that the B-Sheet Centerline will be saved
+        BufferedWriter writer;
+        int returnVal = FileChooser.showSaveDialog(this);
+            if (returnVal == FileChooser.APPROVE_OPTION) {
+                File OutputFile = FileChooser.getSelectedFile();                
+                DisableButtons();
+                OutputTextArea.setText("");
+                bSheetExtraction();
+                try {
+                  writer = new BufferedWriter( new FileWriter( OutputFile.getAbsolutePath(), false ));
+                  OutputTextArea.write( writer );
+                  writer.close();
+                } catch (IOException ex) {
+                  System.
+                          out.println("problem accessing file"+OutputFile.getAbsolutePath());
+                }
+            } else {
+                System.out.println("File access cancelled by user.");
+            }
+            EnableButtons();
     }//GEN-LAST:event_bSheetCenterActionPerformed
 
     private void HelixCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelixCenterActionPerformed
@@ -283,7 +302,7 @@ public class Interface extends javax.swing.JFrame {
         double z;
         String chainID;
         int resSeq;
-        int numRec = 4; // This can be changed to increase or decrease the number elements used in calculation.
+        int numRec = 4; // This can be changed to increase or decrease the number of records used in calculation.
         String[] record;
         record = new String [numRec];
         
@@ -292,6 +311,7 @@ public class Interface extends javax.swing.JFrame {
                 chainID = ChainID(Input[i]);
                 if (chainID.equals(helixChainID)){
                     resSeq = ResSeq(Input[i]);
+                    // This section handles all Helices equal to or longer than numRec number of residues.
                     if (resSeq >= initSeqNum && resSeq <= endSeqNum){
                         if (" CA ".equals(AtomName(Input[i]))){
                             record[k] = Input[i];
@@ -309,6 +329,75 @@ public class Interface extends javax.swing.JFrame {
                             }
                         }
                     }
+                    // This section handles all Helices shorter than the numRec number of residues.
+                    if (resSeq > endSeqNum){
+                        if (k > 0){
+                            x = AvgX(record, numRec);
+                            y = AvgY(record, numRec);
+                            z = AvgZ(record, numRec);
+                            Output(record[k], x, y, z);
+                        }
+                        break;
+                    } 
+                }
+
+            }
+        }
+        OutputTextArea.append("TER   " + "\n");
+    }
+    
+    private void bSheetExtraction(){
+        for (int i=0; i<Input.length-1; i++){
+            if ("HELIX ".equals(RecordType(Input[i]))){
+                String bSheetChainID = Input[i].substring(21, 22);                
+                int initSeqNum;
+                String initSeqNumStr = Input[i].substring(22,26).replace(" ","");
+                initSeqNum = Integer.parseInt(initSeqNumStr);
+                int endSeqNum;
+                String endSeqNumStr = Input[i].substring(33,37).replace(" ","");
+                endSeqNum = Integer.parseInt(endSeqNumStr);
+                bSheetCenter(bSheetChainID, initSeqNum, endSeqNum);
+            }
+        }
+        OutputTextArea.append("END   " + "\n");
+    }
+    
+    private void bSheetCenter(String bSheetChainID, int initSeqNum, int endSeqNum){
+        int j = 0;      // Used to track when average calculation takes place
+        int k = 0;      // Tracks which record is currently being used
+        double x;
+        double y;
+        double z;
+        String chainID;
+        int resSeq;
+        int numRec = 4; // This can be changed to increase or decrease the number of records used in calculation.
+        String[] record;
+        record = new String [numRec];
+        
+        for (int i=0; i<Input.length-1; i++){
+            if ("ATOM  ".equals(RecordType(Input[i]))){
+                chainID = ChainID(Input[i]);
+                if (chainID.equals(bSheetChainID)){
+                    resSeq = ResSeq(Input[i]);
+                    // This section handles all b Sheets equal to or longer than numRec number of atoms.
+                    if (resSeq >= initSeqNum && resSeq <= endSeqNum){
+                        if (" N  ".equals(AtomName(Input[i])) || " CA ".equals(AtomName(Input[i])) || " C  ".equals(AtomName(Input[i]))){
+                            record[k] = Input[i];
+                            j++;
+                            k++;
+                            if (j == numRec){
+                                x = AvgX(record, numRec);
+                                y = AvgY(record, numRec);
+                                z = AvgZ(record, numRec);
+                                Output(record[k-1], x, y, z);
+                                j = j-1;
+                                if (k == numRec || resSeq == endSeqNum){
+                                    k = 0;
+                                }
+                            }
+                        }
+                    }
+                    // This section handles all b Sheets shorter than the numRec number of atoms.  Probably wont be used.
                     if (resSeq > endSeqNum){
                         if (k > 0){
                             x = AvgX(record, numRec);
