@@ -348,7 +348,7 @@ public class Interface extends javax.swing.JFrame {
     
     private void bSheetExtraction(){
         for (int i=0; i<Input.length-1; i++){
-            if ("HELIX ".equals(RecordType(Input[i]))){
+            if ("SHEET ".equals(RecordType(Input[i]))){
                 String bSheetChainID = Input[i].substring(21, 22);                
                 int initSeqNum;
                 String initSeqNumStr = Input[i].substring(22,26).replace(" ","");
