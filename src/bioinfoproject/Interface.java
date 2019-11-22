@@ -281,13 +281,9 @@ public class Interface extends javax.swing.JFrame {
     private void HelixExtraction(){
         for (int i=0; i<Input.length-1; i++){
             if ("HELIX ".equals(RecordType(Input[i]))){
-                String helixChainID = Input[i].substring(19, 20);                
-                int initSeqNum;
-                String initSeqNumStr = Input[i].substring(21,25).replace(" ","");
-                initSeqNum = Integer.parseInt(initSeqNumStr);
-                int endSeqNum;
-                String endSeqNumStr = Input[i].substring(33,37).replace(" ","");
-                endSeqNum = Integer.parseInt(endSeqNumStr);
+                String helixChainID = HelixChainID(Input[i]);;                
+                int initSeqNum = HelixInitSeqNum(Input[i]);                
+                int endSeqNum = HelixEndSeqNum(Input[i]);
                 HelixCenter(helixChainID, initSeqNum, endSeqNum);
             }
         }
@@ -349,13 +345,9 @@ public class Interface extends javax.swing.JFrame {
     private void bSheetExtraction(){
         for (int i=0; i<Input.length-1; i++){
             if ("SHEET ".equals(RecordType(Input[i]))){
-                String bSheetChainID = Input[i].substring(21, 22);                
-                int initSeqNum;
-                String initSeqNumStr = Input[i].substring(22,26).replace(" ","");
-                initSeqNum = Integer.parseInt(initSeqNumStr);
-                int endSeqNum;
-                String endSeqNumStr = Input[i].substring(33,37).replace(" ","");
-                endSeqNum = Integer.parseInt(endSeqNumStr);
+                String bSheetChainID = SheetChainID(Input[i]);
+                int initSeqNum = SheetInitSeqNum(Input[i]);
+                int endSeqNum = SheetEndSeqNum(Input[i]);
                 bSheetCenter(bSheetChainID, initSeqNum, endSeqNum);
             }
         }
@@ -414,6 +406,74 @@ public class Interface extends javax.swing.JFrame {
         OutputTextArea.append("TER   " + "\n");
     }
     
+    private void HelixAlignment(){
+        double[][] helix1Points;
+        double[][] helix2Points;
+        double[] helix1MidPoint = new double[3];
+        double[] helix2MidPoint = new double[3];
+        // Get coords for points in helix 1, will only use the first helix in the file.
+        HelixSetup(Input, helix1Points);
+        // Get coords for points in helix 2, will only use the first helix in the file.
+        HelixSetup(Input2, helix2Points);
+        // Find midpoint of each helix and move helix 2 to match helix 1.
+        
+        OutputTextArea.append("END   " + "\n");
+    }
+    
+    // This section identifies the first helix in the provided file.
+    private void HelixSetup(String[] input, Double[][] helixPoints){
+        String helixChainID;
+        String initSeqNumStr;        
+        int initSeqNum;
+        String endSeqNumStr;
+        int endSeqNum;
+        String lengthStr;
+        int length;
+        boolean helixFound = false;
+        
+        for (int i=0; i<Input.length-1; i++){
+            if ("HELIX ".equals(RecordType(input[i]))){
+                helixChainID = HelixChainID(input[i]);                
+                initSeqNum = HelixInitSeqNum(input[i]);
+                endSeqNum = HelixEndSeqNum(input[i]);                
+                length = HelixLength(input[i]);
+                helixPoints = new String[length][3];
+                HelixCoordExtract(input, helixPoints, helixChainID, initSeqNum, endSeqNum);
+                helixFound = true;
+            }
+            if (helixFound){
+                break;
+            }
+        }
+    }
+    
+    // This section extracts the coords of the CA atoms of the helix to a seperate matrix.
+    private void HelixCoordExtract(String[] input, double[][] coords, String helixChainID, int initSeqNum, int endSeqNum){
+        int j = 0;
+        String chainID;
+        int resSeq;
+        
+        for (int i=0; i<input.length-1; i++){
+            if ("ATOM  ".equals(RecordType(input[i]))){
+                chainID = ChainID(input[i]);
+                if (chainID.equals(helixChainID)){
+                    resSeq = ResSeq(Input[i]);                    
+                    if (resSeq >= initSeqNum && resSeq <= endSeqNum){
+                        if (" CA ".equals(AtomName(input[i]))){
+                            coords[j][0] = XCoord(input[i]);
+                            coords[j][1] = YCoord(input[i]);
+                            coords[j][2] = ZCoord(input[i]);
+                            j++;
+                        }
+                    }                    
+                    if (resSeq > endSeqNum){
+                        break;
+                    } 
+                }
+            }
+        }
+    }
+    
     private String RecordType(String record){
         String recordType = record.substring(0,6);
         return recordType;
@@ -424,9 +484,47 @@ public class Interface extends javax.swing.JFrame {
         return atomName;
     }    
     
+    private String HelixChainID(String record){
+        String chainID = record.substring(19, 20);
+        return chainID;
+    }
+    
+    private String SheetChainID(String record){
+        String chainID = record.substring(21, 22);
+        return chainID;
+    }
+    
     private String ChainID(String record){
         String chainID = record.substring(21, 22);
         return chainID;
+    }
+    
+    private int HelixInitSeqNum(String record){
+        int initSeqNum;
+        String initSeqNumStr = record.substring(21, 25).replace(" ", "");
+        initSeqNum = Integer.parseInt(initSeqNumStr);
+        return initSeqNum;
+    }
+    
+    private int HelixEndSeqNum(String record){
+        int endSeqNum;
+        String endSeqNumStr = record.substring(33, 37).replace(" ", "");
+        endSeqNum = Integer.parseInt(endSeqNumStr);
+        return endSeqNum;
+    }
+    
+    private int SheetInitSeqNum(String record){
+        int initSeqNum;
+        String initSeqNumStr = record.substring(22, 26).replace(" ", "");
+        initSeqNum = Integer.parseInt(initSeqNumStr);
+        return initSeqNum;
+    }
+    
+    private int SheetEndSeqNum(String record){
+        int endSeqNum;
+        String endSeqNumStr = record.substring(33, 37).replace(" ", "");
+        endSeqNum = Integer.parseInt(endSeqNumStr);
+        return endSeqNum;
     }
     
     private int ResSeq(String record){
@@ -434,6 +532,13 @@ public class Interface extends javax.swing.JFrame {
         String resSeqStr = record.substring(22, 26).replace(" ", "");
         resSeq = Integer.parseInt(resSeqStr);
         return resSeq;
+    }
+    
+    private int HelixLength(String record){
+        int length;
+        String lengthStr = record.substring(71, 76).replace(" ", "");
+        length = Integer.parseInt(lengthStr);
+        return length;
     }
     
     private double AvgX(String[] record, int numRec){
@@ -570,4 +675,5 @@ public class Interface extends javax.swing.JFrame {
 
     // Global Variables
     public String[] Input;
+    public String[] Input2;
 }
