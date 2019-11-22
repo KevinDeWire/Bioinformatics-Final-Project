@@ -406,21 +406,28 @@ public class Interface extends javax.swing.JFrame {
         OutputTextArea.append("TER   " + "\n");
     }
     
+    // This controls the process of moving and rotating the second helix.
     private void HelixAlignment(){
-        double[][] helix1Points;
-        double[][] helix2Points;
-        double[] helix1MidPoint = new double[3];
-        double[] helix2MidPoint = new double[3];
+        double[][] helixPoints1;                    // x, y, z coords for each residue CA
+        double[][] helixPoints2;                    // x, y, z coords for each residue CA
+        double[] helixMidPoint1 = new double[3];    // x, y, z coords
+        double[] helixMidPoint2 = new double[3];    // x, y, z coords
+        double[] helixMoveDist = new double[3];
         // Get coords for points in helix 1, will only use the first helix in the file.
-        HelixSetup(Input, helix1Points);
+        HelixSetup(Input, helixPoints1);
         // Get coords for points in helix 2, will only use the first helix in the file.
-        HelixSetup(Input2, helix2Points);
+        HelixSetup(Input2, helixPoints2);
         // Find midpoint of each helix and move helix 2 to match helix 1.
+        HelixMidPoint(helixPoints1, helixMidPoint1);
+        HelixMidPoint(helixPoints2, helixMidPoint2);
+        MoveDistance(helixMidPoint1, helixMidPoint2, helixMoveDist);
+        MoveInput2(helixMoveDist);
         
-        OutputTextArea.append("END   " + "\n");
+        
+        Input2Output();
     }
     
-    // This section identifies the first helix in the provided file.
+    // This section identifies and extracts coords for the first helix in the provided file.
     private void HelixSetup(String[] input, Double[][] helixPoints){
         String helixChainID;
         String initSeqNumStr;        
@@ -470,6 +477,48 @@ public class Interface extends javax.swing.JFrame {
                         break;
                     } 
                 }
+            }
+        }
+    }
+    
+    private void HelixMidPoint(double[][] helixPoints, double[] helixMidPoint){
+        int midpoint, start, stop;
+        midpoint = helixPoints.length / 2;
+        start = midpoint - 2;
+        end = start + 4;
+        for (i=0; i<3; i++){
+            helixMidPoint[i] = CoordAvg(helixPoints, start, stop, i);
+        }
+    }
+    
+    Private void MoveDistance(double[] MidPoint1, double[] MidPoint2, double[] moveDist){
+        for (i=0; i<3; i++){
+            moveDist[i] = MidPoint1[i] - MidPoint2[i];
+        }
+    }
+    
+    Private void MoveInput2(double[] helixMoveDist){
+        double xCoordNew;
+        double yCoordNew;
+        double zCoordNew;
+        String xCoord;
+        String yCoord;
+        String zCoord;
+        StringBuilder newRecord
+            
+        for (i=0; i<Input2.length; i++){
+            if ("ATOM  ".equals(RecordType(input[i]))){
+                xCoordNew = XCoord(Input2[i] + helixMoveDist[0];
+                yCoordNew = YCoord(Input2[i] + helixMoveDist[1];
+                zCoordNew = ZCoord(Input2[i] + helixMoveDist[2];
+                xCoord = String.format("%8.3f",x);
+                yCoord = String.format("%8.3f",y);
+                zCoord = String.format("%8.3f",z);
+                newRecord = new StringBuilder(Input2[i]);
+                newRecord.replace(30, 38, xCoord);
+                newRecord.replace(38, 46, yCoord);
+                newRecord.replace(46, 54, zCoord);
+                Input2[i] = newRecord;
             }
         }
     }
@@ -607,6 +656,17 @@ public class Interface extends javax.swing.JFrame {
         return zCoord;
     }
     
+    private double CoordAvg(double[][] helixPoints, int start, int stop, int coordPosition){
+        double coordAvg = 0;        
+        for (int i=start; i < stop; i++){
+            coordAvg = coordAvg + helixPoints[i][coordPosition];            
+        }
+        coordAvg = coordAvg/4;
+        return coordAvg;
+    }
+    
+    
+    
     private void Output(String record, double x, double y, double z){
         String xCoord;
         xCoord = String.format("%8.3f",x);
@@ -621,7 +681,14 @@ public class Interface extends javax.swing.JFrame {
         newRecord.replace(38, 46, yCoord);
         newRecord.replace(46, 54, zCoord);
         OutputTextArea.append(newRecord + "\n");
-    }    
+    }
+    
+    private void Input2Output(){
+        OutputTextArea.setText("");
+        for(i=0; i<Input2.length; i++){
+            OutputTextArea.append(Input2[i] + "\n");
+        }
+    }
     
     /**
      * @param args the command line arguments
