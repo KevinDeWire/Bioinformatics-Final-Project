@@ -311,10 +311,10 @@ public class Interface extends javax.swing.JFrame {
                     }
                     if (resSeq > endSeqNum){
                         if (k > 0){
-                            x = AvgX(record, numRec);
-                            y = AvgY(record, numRec);
-                            z = AvgZ(record, numRec);
-                            Output(record[k], x, y, z);
+                            x = AvgX(record, k);
+                            y = AvgY(record, k);
+                            z = AvgZ(record, k);
+                            Output(record[k-1], x, y, z);
                         }
                         break;
                     } 
@@ -351,12 +351,7 @@ public class Interface extends javax.swing.JFrame {
         double avgX = 0;
         int j = numRec;
         for (int i=0; i < numRec; i++){
-            if(record[i].isEmpty()){
-                j = j-1;
-            }
-            else{
-                avgX = avgX + XCoord(record[i]);
-            }
+            avgX = avgX + XCoord(record[i]);
         }
         avgX = avgX/j;
         return avgX;
@@ -366,12 +361,7 @@ public class Interface extends javax.swing.JFrame {
         double avgY = 0;
         int j = numRec;
         for (int i=0; i < numRec; i++){
-            if(record[i].isEmpty()){
-                j = j-1;
-            }
-            else{
-                avgY = avgY + YCoord(record[i]);
-            }
+            avgY = avgY + YCoord(record[i]);
         }
         avgY = avgY/j;
         return avgY;
@@ -381,12 +371,7 @@ public class Interface extends javax.swing.JFrame {
         double avgZ = 0;
         int j = numRec;
         for (int i=0; i < numRec; i++){
-            if(record[i].isEmpty()){
-                j = j-1;
-            }
-            else{
-                avgZ = avgZ + ZCoord(record[i]);
-            }
+            avgZ = avgZ + ZCoord(record[i]);
         }
         avgZ = avgZ/j;
         return avgZ;
