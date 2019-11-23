@@ -32,6 +32,7 @@ public class Interface extends javax.swing.JFrame {
      */
     public Interface() {
         initComponents();
+        AlignHelices.setEnabled(false);
     }
 
     /**
@@ -51,8 +52,11 @@ public class Interface extends javax.swing.JFrame {
         OutputTextArea = new javax.swing.JTextArea();
         bSheetCenter = new javax.swing.JButton();
         HelixCenter = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        InputLabel = new javax.swing.JLabel();
+        OutputLabel = new javax.swing.JLabel();
+        Helix1 = new javax.swing.JButton();
+        Helix2 = new javax.swing.JButton();
+        AlignHelices = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         Open = new javax.swing.JMenuItem();
@@ -94,11 +98,32 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("Input File");
+        InputLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        InputLabel.setText("Input File");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Output File");
+        OutputLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        OutputLabel.setText("Output File");
+
+        Helix1.setText("Helix 1");
+        Helix1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Helix1ActionPerformed(evt);
+            }
+        });
+
+        Helix2.setText("Helix 2");
+        Helix2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Helix2ActionPerformed(evt);
+            }
+        });
+
+        AlignHelices.setText("Align Helices");
+        AlignHelices.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AlignHelicesActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("File");
 
@@ -130,25 +155,33 @@ public class Interface extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(InputLabel))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(caExtract, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bSheetCenter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(HelixCenter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel2)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(caExtract, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(HelixCenter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Helix2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Helix1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(AlignHelices, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(bSheetCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(OutputLabel)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(InputLabel)
+                    .addComponent(OutputLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -157,7 +190,12 @@ public class Interface extends javax.swing.JFrame {
                         .addComponent(HelixCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(bSheetCenter, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 212, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                        .addComponent(Helix1)
+                        .addGap(18, 18, 18)
+                        .addComponent(Helix2)
+                        .addGap(18, 18, 18)
+                        .addComponent(AlignHelices, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1)
                     .addComponent(jScrollPane2))
                 .addContainerGap())
@@ -170,6 +208,10 @@ public class Interface extends javax.swing.JFrame {
         // This Section allows the user to pick the input file.
         int returnVal = FileChooser.showOpenDialog(this);
             if (returnVal == FileChooser.APPROVE_OPTION) {
+                InputLabel.setText("Input File");
+                OutputLabel.setText("Output File");
+                OutputTextArea.setText("");
+                AlignHelices.setEnabled(false);
                 File InputFile = FileChooser.getSelectedFile();
                 try {
                   // What to do with the file, e.g. display it in a TextArea
@@ -208,7 +250,7 @@ public class Interface extends javax.swing.JFrame {
             } else {
                 System.out.println("File access cancelled by user.");
             }
-            EnableButtons();
+        EnableButtons();
     }//GEN-LAST:event_caExtractActionPerformed
 
     private void bSheetCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSheetCenterActionPerformed
@@ -231,7 +273,7 @@ public class Interface extends javax.swing.JFrame {
             } else {
                 System.out.println("File access cancelled by user.");
             }
-            EnableButtons();
+        EnableButtons();
     }//GEN-LAST:event_bSheetCenterActionPerformed
 
     private void HelixCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelixCenterActionPerformed
@@ -254,19 +296,84 @@ public class Interface extends javax.swing.JFrame {
             } else {
                 System.out.println("File access cancelled by user.");
             }
-            EnableButtons();
+        EnableButtons();
     }//GEN-LAST:event_HelixCenterActionPerformed
+
+    private void AlignHelicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AlignHelicesActionPerformed
+        // This secion allows the user to set the file that the Helix 2 Alignment will be saved
+        BufferedWriter writer;
+        int returnVal = FileChooser.showSaveDialog(this);
+            if (returnVal == FileChooser.APPROVE_OPTION) {
+                File OutputFile = FileChooser.getSelectedFile();                
+                DisableButtons();
+                HelixAlignment();
+                try {
+                  writer = new BufferedWriter( new FileWriter( OutputFile.getAbsolutePath(), false ));
+                  OutputTextArea.write( writer );
+                  writer.close();
+                } catch (IOException ex) {
+                  System.
+                          out.println("problem accessing file"+OutputFile.getAbsolutePath());
+                }
+            } else {
+                System.out.println("File access cancelled by user.");
+            }
+        EnableButtons();
+    }//GEN-LAST:event_AlignHelicesActionPerformed
+
+    private void Helix1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Helix1ActionPerformed
+        // This Section allows the user to pick the Helix 1 file.
+        int returnVal = FileChooser.showOpenDialog(this);
+            if (returnVal == FileChooser.APPROVE_OPTION) {
+                InputLabel.setText("Helix 1");                
+                File InputFile = FileChooser.getSelectedFile();
+                try {
+                  // What to do with the file, e.g. display it in a TextArea
+                  InputTextArea.read( new FileReader( InputFile.getAbsolutePath() ), null );
+                } catch (IOException ex) {
+                  System.
+                          out.println("problem accessing file"+InputFile.getAbsolutePath());
+                }
+                Input = InputTextArea.getText().split("\n");
+            } else {
+                System.out.println("File access cancelled by user.");
+            }
+    }//GEN-LAST:event_Helix1ActionPerformed
+
+    private void Helix2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Helix2ActionPerformed
+        // This Section allows the user to pick the Helix 2 file.
+        int returnVal = FileChooser.showOpenDialog(this);
+            if (returnVal == FileChooser.APPROVE_OPTION) {                
+                OutputLabel.setText("Helix 2");
+                AlignHelices.setEnabled(true);
+                File InputFile = FileChooser.getSelectedFile();
+                try {
+                  // What to do with the file, e.g. display it in a TextArea
+                  OutputTextArea.read( new FileReader( InputFile.getAbsolutePath() ), null );
+                } catch (IOException ex) {
+                  System.
+                          out.println("problem accessing file"+InputFile.getAbsolutePath());
+                }
+                Input2 = OutputTextArea.getText().split("\n");
+            } else {
+                System.out.println("File access cancelled by user.");
+            }
+    }//GEN-LAST:event_Helix2ActionPerformed
 
     private void DisableButtons(){
         caExtract.setEnabled(false);
         HelixCenter.setEnabled(false);
         bSheetCenter.setEnabled(false);
+        Helix1.setEnabled(false);
+        Helix2.setEnabled(false);        
     }
     
     private void EnableButtons(){
         caExtract.setEnabled(true);
         HelixCenter.setEnabled(true);
         bSheetCenter.setEnabled(true);
+        Helix1.setEnabled(true);
+        Helix2.setEnabled(true);
     }
     
     private void caExtraction(){
@@ -281,7 +388,7 @@ public class Interface extends javax.swing.JFrame {
     private void HelixExtraction(){
         for (int i=0; i<Input.length-1; i++){
             if ("HELIX ".equals(RecordType(Input[i]))){
-                String helixChainID = HelixChainID(Input[i]);;                
+                String helixChainID = HelixChainID(Input[i]);              
                 int initSeqNum = HelixInitSeqNum(Input[i]);                
                 int endSeqNum = HelixEndSeqNum(Input[i]);
                 HelixCenter(helixChainID, initSeqNum, endSeqNum);
@@ -328,10 +435,10 @@ public class Interface extends javax.swing.JFrame {
                     // This section handles all Helices shorter than the numRec number of residues.
                     if (resSeq > endSeqNum){
                         if (k > 0){
-                            x = AvgX(record, numRec);
-                            y = AvgY(record, numRec);
-                            z = AvgZ(record, numRec);
-                            Output(record[k], x, y, z);
+                            x = AvgX(record, k);
+                            y = AvgY(record, k);
+                            z = AvgZ(record, k);
+                            Output(record[k-1], x, y, z);
                         }
                         break;
                     } 
@@ -389,13 +496,13 @@ public class Interface extends javax.swing.JFrame {
                             }
                         }
                     }
-                    // This section handles all b Sheets shorter than the numRec number of atoms.  Probably wont be used.
+                    // This section handles all b Sheets shorter than the numRec number of atoms.  Probably will not be used.
                     if (resSeq > endSeqNum){
                         if (k > 0){
-                            x = AvgX(record, numRec);
-                            y = AvgY(record, numRec);
-                            z = AvgZ(record, numRec);
-                            Output(record[k], x, y, z);
+                            x = AvgX(record, k);
+                            y = AvgY(record, k);
+                            z = AvgZ(record, k);
+                            Output(record[k-1], x, y, z);
                         }
                         break;
                     } 
@@ -408,27 +515,28 @@ public class Interface extends javax.swing.JFrame {
     
     // This controls the process of moving and rotating the second helix.
     private void HelixAlignment(){
-        double[][] helixPoints1 = null;                    // x, y, z coords for each residue CA
-        double[][] helixPoints2 = null;                    // x, y, z coords for each residue CA
+        double[][] helixPoints1;                    // x, y, z coords for each residue CA
+        double[][] helixPoints2;                    // x, y, z coords for each residue CA
         double[] helixMidPoint1 = new double[3];    // x, y, z coords
         double[] helixMidPoint2 = new double[3];    // x, y, z coords
         double[] helixMoveDist = new double[3];
         // Get coords for points in helix 1, will only use the first helix in the file.
-        HelixSetup(Input, helixPoints1);
+        helixPoints1 = HelixSetup(Input);
         // Get coords for points in helix 2, will only use the first helix in the file.
-        HelixSetup(Input2, helixPoints2);
+        helixPoints2 = HelixSetup(Input2);
         // Find midpoint of each helix and move helix 2 to match helix 1.
         HelixMidPoint(helixPoints1, helixMidPoint1);
         HelixMidPoint(helixPoints2, helixMidPoint2);
         MoveDistance(helixMidPoint1, helixMidPoint2, helixMoveDist);
         MoveInput2(helixMoveDist);
-        
-        
+                
         Input2Output();
+        TestOutput(helixMidPoint1, helixMidPoint2, helixPoints1, helixPoints2);
     }
     
     // This section identifies and extracts coords for the first helix in the provided file.
-    private void HelixSetup(String[] input, double[][] helixPoints){
+    private double[][] HelixSetup(String[] helixInput){
+        double[][] helixPoints = null;
         String helixChainID;
         String initSeqNumStr;        
         int initSeqNum;
@@ -438,38 +546,39 @@ public class Interface extends javax.swing.JFrame {
         int length;
         boolean helixFound = false;
         
-        for (int i=0; i<Input.length-1; i++){
-            if ("HELIX ".equals(RecordType(input[i]))){
-                helixChainID = HelixChainID(input[i]);                
-                initSeqNum = HelixInitSeqNum(input[i]);
-                endSeqNum = HelixEndSeqNum(input[i]);                
-                length = HelixLength(input[i]);
+        for (int i=0; i<helixInput.length-1; i++){
+            if ("HELIX ".equals(RecordType(helixInput[i]))){
+                helixChainID = HelixChainID(helixInput[i]);                
+                initSeqNum = HelixInitSeqNum(helixInput[i]);
+                endSeqNum = HelixEndSeqNum(helixInput[i]);                
+                length = HelixLength(helixInput[i]);
                 helixPoints = new double[length][3];
-                HelixCoordExtract(input, helixPoints, helixChainID, initSeqNum, endSeqNum);
+                HelixCoordExtract(helixInput, helixPoints, helixChainID, initSeqNum, endSeqNum);
                 helixFound = true;
             }
             if (helixFound){
                 break;
             }
         }
+        return helixPoints;
     }
     
     // This section extracts the coords of the CA atoms of the helix to a seperate matrix.
-    private void HelixCoordExtract(String[] input, double[][] coords, String helixChainID, int initSeqNum, int endSeqNum){
+    private void HelixCoordExtract(String[] helixInput, double[][] coords, String helixChainID, int initSeqNum, int endSeqNum){
         int j = 0;
         String chainID;
         int resSeq;
         
-        for (int i=0; i<input.length-1; i++){
-            if ("ATOM  ".equals(RecordType(input[i]))){
-                chainID = ChainID(input[i]);
+        for (int i=0; i<helixInput.length-1; i++){
+            if ("ATOM  ".equals(RecordType(helixInput[i]))){
+                chainID = ChainID(helixInput[i]);
                 if (chainID.equals(helixChainID)){
                     resSeq = ResSeq(Input[i]);                    
                     if (resSeq >= initSeqNum && resSeq <= endSeqNum){
-                        if (" CA ".equals(AtomName(input[i]))){
-                            coords[j][0] = XCoord(input[i]);
-                            coords[j][1] = YCoord(input[i]);
-                            coords[j][2] = ZCoord(input[i]);
+                        if (" CA ".equals(AtomName(helixInput[i]))){
+                            coords[j][0] = XCoord(helixInput[i]);
+                            coords[j][1] = YCoord(helixInput[i]);
+                            coords[j][2] = ZCoord(helixInput[i]);
                             j++;
                         }
                     }                    
@@ -483,7 +592,8 @@ public class Interface extends javax.swing.JFrame {
     
     private void HelixMidPoint(double[][] helixPoints, double[] helixMidPoint){
         int midpoint, start, stop;
-        midpoint = helixPoints.length / 2;
+        midpoint = helixPoints.length;
+        midpoint = midpoint/2;
         start = midpoint - 2;
         stop = start + 4;
         for (int i=0; i<3; i++){
@@ -506,7 +616,7 @@ public class Interface extends javax.swing.JFrame {
         String zCoord;
         StringBuilder newRecord;
             
-        for (int i=0; i<Input2.length; i++){
+        for (int i=0; i<Input2.length-1; i++){
             if ("ATOM  ".equals(RecordType(Input2[i]))){
                 xCoordNew = XCoord(Input2[i]) + helixMoveDist[0];
                 yCoordNew = YCoord(Input2[i]) + helixMoveDist[1];
@@ -594,12 +704,7 @@ public class Interface extends javax.swing.JFrame {
         double avgX = 0;
         int j = numRec;
         for (int i=0; i < numRec; i++){
-            if(!record[i].isEmpty()){
-                avgX = avgX + XCoord(record[i]);
-            }
-            else{
-                j = j-1;
-            }
+            avgX = avgX + XCoord(record[i]);
         }
         avgX = avgX/j;
         return avgX;
@@ -609,12 +714,7 @@ public class Interface extends javax.swing.JFrame {
         double avgY = 0;
         int j = numRec;
         for (int i=0; i < numRec; i++){
-            if(!record[i].isEmpty()){
-                avgY = avgY + YCoord(record[i]);
-            }
-            else{
-                j = j-1;
-            }
+            avgY = avgY + YCoord(record[i]);
         }
         avgY = avgY/j;
         return avgY;
@@ -624,12 +724,7 @@ public class Interface extends javax.swing.JFrame {
         double avgZ = 0;
         int j = numRec;
         for (int i=0; i < numRec; i++){
-            if(!record[i].isEmpty()){
-                avgZ = avgZ + ZCoord(record[i]);
-            }
-            else{
-                j = j-1;
-            }
+            avgZ = avgZ + ZCoord(record[i]);
         }
         avgZ = avgZ/j;
         return avgZ;
@@ -687,7 +782,35 @@ public class Interface extends javax.swing.JFrame {
         OutputTextArea.setText("");
         for(int i=0; i<Input2.length; i++){
             OutputTextArea.append(Input2[i] + "\n");
+        }        
+    }
+    
+    private void TestOutput(double[] helixMidPoint1, double[] helixMidPoint2, double[][] helixPoints1, double[][] helixPoints2){
+        InputTextArea.setText("");
+        for(int i=0; i<helixPoints1.length; i++){
+            for (int j=0; j<3; j++){
+                InputTextArea.append(helixPoints1[i][j] + ", ");
+            }
+            InputTextArea.append("\n");
         }
+        InputTextArea.append("\n");
+        for(int i=0; i<helixPoints2.length; i++){
+            for (int j=0; j<3; j++){
+                InputTextArea.append(helixPoints2[i][j] + ", ");
+            }
+            InputTextArea.append("\n");
+        }
+        InputTextArea.append("\n");
+        InputTextArea.append("Midpoint 1: ");
+        for (int i=0; i<3; i++){
+            InputTextArea.append(helixMidPoint1[i] + ", ");
+        }
+        InputTextArea.append("\n");
+        InputTextArea.append("Midpoint 2: ");
+        for (int i=0; i<3; i++){
+            InputTextArea.append(helixMidPoint2[i] + ", ");
+        }
+        InputTextArea.append("\n");
     }
     
     /**
@@ -724,16 +847,19 @@ public class Interface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AlignHelices;
     private javax.swing.JMenuItem Exit;
     private javax.swing.JFileChooser FileChooser;
+    private javax.swing.JButton Helix1;
+    private javax.swing.JButton Helix2;
     private javax.swing.JButton HelixCenter;
+    private javax.swing.JLabel InputLabel;
     private javax.swing.JTextArea InputTextArea;
     private javax.swing.JMenuItem Open;
+    private javax.swing.JLabel OutputLabel;
     private javax.swing.JTextArea OutputTextArea;
     private javax.swing.JButton bSheetCenter;
     private javax.swing.JButton caExtract;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
