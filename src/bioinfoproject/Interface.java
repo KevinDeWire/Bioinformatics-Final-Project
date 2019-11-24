@@ -334,6 +334,7 @@ public class Interface extends javax.swing.JFrame {
                   System.
                           out.println("problem accessing file"+InputFile.getAbsolutePath());
                 }
+                Input = null;
                 Input = InputTextArea.getText().split("\n");
             } else {
                 System.out.println("File access cancelled by user.");
@@ -354,6 +355,7 @@ public class Interface extends javax.swing.JFrame {
                   System.
                           out.println("problem accessing file"+InputFile.getAbsolutePath());
                 }
+                Input2 = null;
                 Input2 = OutputTextArea.getText().split("\n");
             } else {
                 System.out.println("File access cancelled by user.");
@@ -531,19 +533,19 @@ public class Interface extends javax.swing.JFrame {
         MoveInput2(helixMoveDist);
                 
         Input2Output();
-        TestOutput(helixMidPoint1, helixMidPoint2, helixPoints1, helixPoints2);
+        //TestOutput(helixMidPoint1, helixMidPoint2, helixPoints1, helixPoints2);
     }
     
     // This section identifies and extracts coords for the first helix in the provided file.
     private double[][] HelixSetup(String[] helixInput){
         double[][] helixPoints = null;
-        String helixChainID;
-        String initSeqNumStr;        
-        int initSeqNum;
-        String endSeqNumStr;
-        int endSeqNum;
-        String lengthStr;
-        int length;
+        String helixChainID = null;
+        String initSeqNumStr = null;        
+        int initSeqNum = 0;
+        String endSeqNumStr = null;
+        int endSeqNum = 0;
+        String lengthStr = null;
+        int length = 0;
         boolean helixFound = false;
         
         for (int i=0; i<helixInput.length-1; i++){
@@ -573,7 +575,7 @@ public class Interface extends javax.swing.JFrame {
             if ("ATOM  ".equals(RecordType(helixInput[i]))){
                 chainID = ChainID(helixInput[i]);
                 if (chainID.equals(helixChainID)){
-                    resSeq = ResSeq(Input[i]);                    
+                    resSeq = ResSeq(helixInput[i]);                    
                     if (resSeq >= initSeqNum && resSeq <= endSeqNum){
                         if (" CA ".equals(AtomName(helixInput[i]))){
                             coords[j][0] = XCoord(helixInput[i]);
