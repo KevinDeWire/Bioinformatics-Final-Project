@@ -39,3 +39,10 @@ Your programs are expected to perform the following tasks.
 (3) Output a PDB file of those points in the central lines of beta-strands. You may also use “S” as the label for the point in the PDB file.
 
 If your output file contains points of all axes, you may insert a line between two helices. The line should just contain only one word “TER” to separate two helices. You may refer to the online definition of PDB format about TER. 
+
+
+#Bioinformatics-Final-Project-Extra-Credit
+
+Calculate the translation and rotation involved to align two helices.
+
+In this task, you are expected to write a program to align two helices given by a user as two PDB files. The alignment is based on the central axis of each helix. In order to analyze many structures, they are often aligned using a pre-defined rule. Translation and rotation are fundamental techniques to work with 3-dimensional data. One way to do it is to calculate the translation involved to merge the two centers of your axes. Then you can calculate the rotation involved to align the two axes. Once the translation and rotation are identified, they can be applied to one of the two helices.
