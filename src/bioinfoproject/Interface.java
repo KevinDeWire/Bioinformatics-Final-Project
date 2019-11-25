@@ -521,6 +521,8 @@ public class Interface extends javax.swing.JFrame {
         double[][] helixPoints2;                    // x, y, z coords for each residue CA
         double[] helixMidPoint1 = new double[3];    // x, y, z coords
         double[] helixMidPoint2 = new double[3];    // x, y, z coords
+        double[] helixEndPoint1 = new double[3];    // x, y, z coords
+        double[] helixEndPoint2 = new double[3];    // x, y, z coords
         double[] helixMoveDist = new double[3];
         // Get coords for points in helix 1, will only use the first helix in the file.
         helixPoints1 = HelixSetup(Input);
@@ -531,6 +533,8 @@ public class Interface extends javax.swing.JFrame {
         HelixMidPoint(helixPoints2, helixMidPoint2);
         MoveDistance(helixMidPoint1, helixMidPoint2, helixMoveDist);
         MoveInput2(helixMoveDist);
+        HelixEndPoint(helixPoints1, helixEndPoint1);
+        HelixEndPoint(helixPoints2, helixEndPoint2);
                 
         Input2Output();
         //TestOutput(helixMidPoint1, helixMidPoint2, helixPoints1, helixPoints2);
@@ -609,6 +613,15 @@ public class Interface extends javax.swing.JFrame {
         }
     }
     
+    private void HelixEndPoint(double[][] helixPoints, double[] helixEndPoint){
+        int start, stop;
+        stop = helixPoints.length;
+        start = stop - 4;
+        for (int i=0; i<3; i++){
+            helixEndPoint[i] = CoordAvg(helixPoints, start, stop, i);
+        }
+    }
+
     private void MoveInput2(double[] helixMoveDist){
         double xCoordNew;
         double yCoordNew;
@@ -754,11 +767,12 @@ public class Interface extends javax.swing.JFrame {
     }
     
     private double CoordAvg(double[][] helixPoints, int start, int stop, int coordPosition){
-        double coordAvg = 0;        
+        double coordAvg = 0;
+        int divisor = stop - start;
         for (int i=start; i < stop; i++){
             coordAvg = coordAvg + helixPoints[i][coordPosition];            
         }
-        coordAvg = coordAvg/4;
+        coordAvg = coordAvg/divisor;
         return coordAvg;
     }
     
