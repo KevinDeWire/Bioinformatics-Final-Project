@@ -538,7 +538,15 @@ public class Interface extends javax.swing.JFrame {
         HelixEndPoint(helixPoints2, helixEndPoint2);
         thetaZ = Theta(helixEndPoint1, helixMidPoint1, 1, 0) - Theta(helixEndPoint2, helixMidPoint1, 1, 0);
         RotateZ(Input2, thetaZ);
-                
+        helixPoints2 = HelixSetup(Input2);
+        HelixEndPoint(helixPoints2, helixEndPoint2);
+        thetaY = Theta(helixEndPoint1, helixMidPoint1, 2, 0) - Theta(helixEndPoint2, helixMidPoint1, 2, 0);
+        RotateY(Input2, thetaY);
+        helixPoints2 = HelixSetup(Input2);
+        HelixEndPoint(helixPoints2, helixEndPoint2);
+        thetaX = Theta(helixEndPoint1, helixMidPoint1, 2, 1) - Theta(helixEndPoint2, helixMidPoint1, 2, 1);
+        RotateX(Input2, thetaX);
+        
         Input2Output();
         //TestOutput(helixMidPoint1, helixMidPoint2, helixPoints1, helixPoints2);
     }
