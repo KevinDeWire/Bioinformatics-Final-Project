@@ -524,6 +524,7 @@ public class Interface extends javax.swing.JFrame {
         double[] helixEndPoint1 = new double[3];    // x, y, z coords
         double[] helixEndPoint2 = new double[3];    // x, y, z coords
         double[] helixMoveDist = new double[3];
+        double thetaX, thetaY, thetaZ;
         // Get coords for points in helix 1, will only use the first helix in the file.
         helixPoints1 = HelixSetup(Input);
         // Get coords for points in helix 2, will only use the first helix in the file.
@@ -532,9 +533,11 @@ public class Interface extends javax.swing.JFrame {
         HelixMidPoint(helixPoints1, helixMidPoint1);
         HelixMidPoint(helixPoints2, helixMidPoint2);
         MoveDistance(helixMidPoint1, helixMidPoint2, helixMoveDist);
-        MoveInput2(helixMoveDist);
+        MoveInput(Input2, helixMoveDist);
         HelixEndPoint(helixPoints1, helixEndPoint1);
         HelixEndPoint(helixPoints2, helixEndPoint2);
+        thetaZ = Theta(helixEndPoint1, helixMidPoint1, 1, 0) - Theta(helixEndPoint2, helixMidPoint1, 1, 0);
+        RotateZ(Input2, thetaZ);
                 
         Input2Output();
         //TestOutput(helixMidPoint1, helixMidPoint2, helixPoints1, helixPoints2);
@@ -622,7 +625,7 @@ public class Interface extends javax.swing.JFrame {
         }
     }
 
-    private void MoveInput2(double[] helixMoveDist){
+    private void MoveInput(String[] helixInput, double[] helixMoveDist){
         double xCoordNew;
         double yCoordNew;
         double zCoordNew;
@@ -631,19 +634,88 @@ public class Interface extends javax.swing.JFrame {
         String zCoord;
         StringBuilder newRecord;
             
-        for (int i=0; i<Input2.length-1; i++){
-            if ("ATOM  ".equals(RecordType(Input2[i]))){
-                xCoordNew = XCoord(Input2[i]) + helixMoveDist[0];
-                yCoordNew = YCoord(Input2[i]) + helixMoveDist[1];
-                zCoordNew = ZCoord(Input2[i]) + helixMoveDist[2];
+        for (int i=0; i<helixInput.length-1; i++){
+            if ("ATOM  ".equals(RecordType(helixInput[i]))){
+                xCoordNew = XCoord(helixInput[i]) + helixMoveDist[0];
+                yCoordNew = YCoord(helixInput[i]) + helixMoveDist[1];
+                zCoordNew = ZCoord(helixInput[i]) + helixMoveDist[2];
                 xCoord = String.format("%8.3f",xCoordNew);
                 yCoord = String.format("%8.3f",yCoordNew);
                 zCoord = String.format("%8.3f",zCoordNew);
-                newRecord = new StringBuilder(Input2[i]);
+                newRecord = new StringBuilder(helixInput[i]);
                 newRecord.replace(30, 38, xCoord);
                 newRecord.replace(38, 46, yCoord);
                 newRecord.replace(46, 54, zCoord);
-                Input2[i] = newRecord.toString();
+                helixInput[i] = newRecord.toString();
+            }
+        }
+    }
+    
+    private void RotateZ(String[] helixInput, double theta){
+        double sinTheta = sin(theta);
+        double cosTheta = cos(theta);
+        double xCoordNew;
+        double yCoordNew;
+        String xCoord;
+        String yCoord;
+        StringBuilder newRecord;
+            
+        for (int i=0; i<helixInput.length-1; i++){
+            if ("ATOM  ".equals(RecordType(helixInput[i]))){
+                xCoordNew = (XCoord(helixInput[i])*cosTheta) - (YCoord(helixInput[i])*sinTheta);
+                yCoordNew = (YCoord(helixInput[i])*cosTheta) + (XCoord(helixInput[i])*sinTheta);
+                xCoord = String.format("%8.3f",xCoordNew);
+                yCoord = String.format("%8.3f",yCoordNew);
+                newRecord = new StringBuilder(helixInput[i]);
+                newRecord.replace(30, 38, xCoord);
+                newRecord.replace(38, 46, yCoord);
+                helixInput[i] = newRecord.toString();
+            }
+        }
+    }
+    
+    private void RotateY(String[] helixInput, double theta){
+        double sinTheta = sin(theta);
+        double cosTheta = cos(theta);
+        double xCoordNew;
+        double zCoordNew;
+        String xCoord;
+        String zCoord;
+        StringBuilder newRecord;
+            
+        for (int i=0; i<helixInput.length-1; i++){
+            if ("ATOM  ".equals(RecordType(helixInput[i]))){
+                xCoordNew = (XCoord(helixInput[i])*cosTheta) + (ZCoord(helixInput[i])*sinTheta);
+                zCoordNew = (ZCoord(helixInput[i])*cosTheta) - (XCoord(helixInput[i])*sinTheta);
+                xCoord = String.format("%8.3f",xCoordNew);
+                zCoord = String.format("%8.3f",zCoordNew);
+                newRecord = new StringBuilder(helixInput[i]);
+                newRecord.replace(30, 38, xCoord);
+                newRecord.replace(46, 54, zCoord);
+                helixInput[i] = newRecord.toString();
+            }
+        }
+    }
+    
+    private void RotateX(String[] helixInput, double theta){
+        double sinTheta = sin(theta);
+        double cosTheta = cos(theta);
+        double yCoordNew;
+        double zCoordNew;
+        String yCoord;
+        String zCoord;
+        StringBuilder newRecord;
+            
+        for (int i=0; i<helixInput.length-1; i++){
+            if ("ATOM  ".equals(RecordType(helixInput[i]))){
+                yCoordNew = (YCoord(helixInput[i])*cosTheta) - (ZCoord(helixInput[i])*sinTheta);
+                zCoordNew = (ZCoord(helixInput[i])*cosTheta) + (YCoord(helixInput[i])*sinTheta);
+                yCoord = String.format("%8.3f",yCoordNew);
+                zCoord = String.format("%8.3f",zCoordNew);
+                newRecord = new StringBuilder(helixInput[i]);
+                newRecord.replace(38, 46, yCoord);
+                newRecord.replace(46, 54, zCoord);
+                helixInput[i] = newRecord.toString();
             }
         }
     }
@@ -776,7 +848,10 @@ public class Interface extends javax.swing.JFrame {
         return coordAvg;
     }
     
-    
+    private double Theta(double[] helixMidPoint, double[] helixEndPoint, int opp, int adj){
+        double theta = atan((helixEndPoint[opp] - helixMidPoint[opp]) / (helixEndPoint[adj] - helixMidPoint[adj]));
+        return theta;
+    }
     
     private void Output(String record, double x, double y, double z){
         String xCoord;
