@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import static java.lang.Math.atan;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 class MyCustomFilter extends javax.swing.filechooser.FileFilter {
     @Override
@@ -104,14 +107,14 @@ public class Interface extends javax.swing.JFrame {
         OutputLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         OutputLabel.setText("Output File");
 
-        Helix1.setText("Helix 1");
+        Helix1.setText("Input 1");
         Helix1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Helix1ActionPerformed(evt);
             }
         });
 
-        Helix2.setText("Helix 2");
+        Helix2.setText("Input 2");
         Helix2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Helix2ActionPerformed(evt);
@@ -534,33 +537,32 @@ public class Interface extends javax.swing.JFrame {
         HelixMidPoint(helixPoints2, helixMidPoint2);
         MoveDistance(helixMidPoint1, helixMidPoint2, helixMoveDist);
         MoveInput(Input2, helixMoveDist);
+        helixPoints2 = HelixSetup(Input2);
+        // Find the endpoints and then progressivly rotate helix 2 around z, y, x axis.
         HelixEndPoint(helixPoints1, helixEndPoint1);
         HelixEndPoint(helixPoints2, helixEndPoint2);
         thetaZ = Theta(helixEndPoint1, helixMidPoint1, 1, 0) - Theta(helixEndPoint2, helixMidPoint1, 1, 0);
-        RotateZ(Input2, thetaZ);
+        RotateZ(Input2, helixMidPoint1, thetaZ);
         helixPoints2 = HelixSetup(Input2);
         HelixEndPoint(helixPoints2, helixEndPoint2);
         thetaY = Theta(helixEndPoint1, helixMidPoint1, 2, 0) - Theta(helixEndPoint2, helixMidPoint1, 2, 0);
-        RotateY(Input2, thetaY);
+        RotateY(Input2, helixMidPoint1, thetaY);
         helixPoints2 = HelixSetup(Input2);
         HelixEndPoint(helixPoints2, helixEndPoint2);
         thetaX = Theta(helixEndPoint1, helixMidPoint1, 2, 1) - Theta(helixEndPoint2, helixMidPoint1, 2, 1);
-        RotateX(Input2, thetaX);
+        RotateX(Input2, helixMidPoint1, thetaX);
         
         Input2Output();
-        //TestOutput(helixMidPoint1, helixMidPoint2, helixPoints1, helixPoints2);
+//        TestOutput(helixMidPoint1, helixMidPoint2, helixPoints1, helixPoints2, helixEndPoint1, helixEndPoint2);
     }
     
     // This section identifies and extracts coords for the first helix in the provided file.
     private double[][] HelixSetup(String[] helixInput){
         double[][] helixPoints = null;
-        String helixChainID = null;
-        String initSeqNumStr = null;        
-        int initSeqNum = 0;
-        String endSeqNumStr = null;
-        int endSeqNum = 0;
-        String lengthStr = null;
-        int length = 0;
+        String helixChainID;        
+        int initSeqNum;
+        int endSeqNum;
+        int length;
         boolean helixFound = false;
         
         for (int i=0; i<helixInput.length-1; i++){
@@ -659,9 +661,11 @@ public class Interface extends javax.swing.JFrame {
         }
     }
     
-    private void RotateZ(String[] helixInput, double theta){
+    private void RotateZ(String[] helixInput, double[] helixMidPoint, double theta){
         double sinTheta = sin(theta);
         double cosTheta = cos(theta);
+        double xCoordOrg;
+        double yCoordOrg;
         double xCoordNew;
         double yCoordNew;
         String xCoord;
@@ -670,8 +674,10 @@ public class Interface extends javax.swing.JFrame {
             
         for (int i=0; i<helixInput.length-1; i++){
             if ("ATOM  ".equals(RecordType(helixInput[i]))){
-                xCoordNew = (XCoord(helixInput[i])*cosTheta) - (YCoord(helixInput[i])*sinTheta);
-                yCoordNew = (YCoord(helixInput[i])*cosTheta) + (XCoord(helixInput[i])*sinTheta);
+                xCoordOrg = XCoord(helixInput[i]) - helixMidPoint[0];
+                yCoordOrg = YCoord(helixInput[i]) - helixMidPoint[1];
+                xCoordNew = ((xCoordOrg*cosTheta) - (yCoordOrg*sinTheta)) + helixMidPoint[0];
+                yCoordNew = ((yCoordOrg*cosTheta) + (xCoordOrg*sinTheta)) + helixMidPoint[1];
                 xCoord = String.format("%8.3f",xCoordNew);
                 yCoord = String.format("%8.3f",yCoordNew);
                 newRecord = new StringBuilder(helixInput[i]);
@@ -682,9 +688,11 @@ public class Interface extends javax.swing.JFrame {
         }
     }
     
-    private void RotateY(String[] helixInput, double theta){
+    private void RotateY(String[] helixInput, double[] helixMidPoint, double theta){
         double sinTheta = sin(theta);
         double cosTheta = cos(theta);
+        double xCoordOrg;
+        double zCoordOrg;
         double xCoordNew;
         double zCoordNew;
         String xCoord;
@@ -693,8 +701,10 @@ public class Interface extends javax.swing.JFrame {
             
         for (int i=0; i<helixInput.length-1; i++){
             if ("ATOM  ".equals(RecordType(helixInput[i]))){
-                xCoordNew = (XCoord(helixInput[i])*cosTheta) + (ZCoord(helixInput[i])*sinTheta);
-                zCoordNew = (ZCoord(helixInput[i])*cosTheta) - (XCoord(helixInput[i])*sinTheta);
+                xCoordOrg = XCoord(helixInput[i]) - helixMidPoint[0];
+                zCoordOrg = ZCoord(helixInput[i]) - helixMidPoint[2];
+                xCoordNew = ((xCoordOrg*cosTheta) - (zCoordOrg*sinTheta)) + helixMidPoint[0];
+                zCoordNew = ((zCoordOrg*cosTheta) + (xCoordOrg*sinTheta)) + helixMidPoint[2];
                 xCoord = String.format("%8.3f",xCoordNew);
                 zCoord = String.format("%8.3f",zCoordNew);
                 newRecord = new StringBuilder(helixInput[i]);
@@ -705,9 +715,11 @@ public class Interface extends javax.swing.JFrame {
         }
     }
     
-    private void RotateX(String[] helixInput, double theta){
+    private void RotateX(String[] helixInput, double[] helixMidPoint, double theta){
         double sinTheta = sin(theta);
         double cosTheta = cos(theta);
+        double yCoordOrg;
+        double zCoordOrg;        
         double yCoordNew;
         double zCoordNew;
         String yCoord;
@@ -716,8 +728,10 @@ public class Interface extends javax.swing.JFrame {
             
         for (int i=0; i<helixInput.length-1; i++){
             if ("ATOM  ".equals(RecordType(helixInput[i]))){
-                yCoordNew = (YCoord(helixInput[i])*cosTheta) - (ZCoord(helixInput[i])*sinTheta);
-                zCoordNew = (ZCoord(helixInput[i])*cosTheta) + (YCoord(helixInput[i])*sinTheta);
+                yCoordOrg = YCoord(helixInput[i]) - helixMidPoint[1];
+                zCoordOrg = ZCoord(helixInput[i]) - helixMidPoint[2];
+                yCoordNew = ((yCoordOrg*cosTheta) - (zCoordOrg*sinTheta)) + helixMidPoint[1];
+                zCoordNew = ((zCoordOrg*cosTheta) + (yCoordOrg*sinTheta)) + helixMidPoint[2];
                 yCoord = String.format("%8.3f",yCoordNew);
                 zCoord = String.format("%8.3f",zCoordNew);
                 newRecord = new StringBuilder(helixInput[i]);
@@ -884,7 +898,7 @@ public class Interface extends javax.swing.JFrame {
         }        
     }
     
-    private void TestOutput(double[] helixMidPoint1, double[] helixMidPoint2, double[][] helixPoints1, double[][] helixPoints2){
+    private void TestOutput(double[] helixMidPoint1, double[] helixMidPoint2, double[][] helixPoints1, double[][] helixPoints2, double[] helixEndPoint1, double[] helixEndPoint2){
         InputTextArea.setText("");
         for(int i=0; i<helixPoints1.length; i++){
             for (int j=0; j<3; j++){
@@ -908,6 +922,16 @@ public class Interface extends javax.swing.JFrame {
         InputTextArea.append("Midpoint 2: ");
         for (int i=0; i<3; i++){
             InputTextArea.append(helixMidPoint2[i] + ", ");
+        }
+        InputTextArea.append("\n");
+        InputTextArea.append("Endpoint 1: ");
+        for (int i=0; i<3; i++){
+            InputTextArea.append(helixEndPoint1[i] + ", ");
+        }
+        InputTextArea.append("\n");
+        InputTextArea.append("Endpoint 2: ");
+        for (int i=0; i<3; i++){
+            InputTextArea.append(helixEndPoint2[i] + ", ");
         }
         InputTextArea.append("\n");
     }

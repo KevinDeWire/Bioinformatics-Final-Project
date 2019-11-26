@@ -199,7 +199,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="Helix1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Helix 1"/>
+        <Property name="text" type="java.lang.String" value="Input 1"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Helix1ActionPerformed"/>
@@ -207,7 +207,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="Helix2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Helix 2"/>
+        <Property name="text" type="java.lang.String" value="Input 2"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Helix2ActionPerformed"/>
