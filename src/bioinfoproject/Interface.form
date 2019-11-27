@@ -40,6 +40,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="title" type="java.lang.String" value="CS723 Programming Project - Fall 2019 - Reduced Representation of a Protein Structure - Kevin DeWire"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
@@ -62,64 +63,56 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="2" attributes="0">
-                  <Component id="jScrollPane1" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="InputLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="2" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="caExtract" max="32767" attributes="0"/>
-                      <Component id="HelixCenter" alignment="0" max="32767" attributes="0"/>
-                      <Component id="Helix2" alignment="0" max="32767" attributes="0"/>
-                      <Component id="Helix1" alignment="0" max="32767" attributes="0"/>
-                      <Component id="AlignHelices" alignment="1" max="32767" attributes="0"/>
-                  </Group>
-                  <Component id="bSheetCenter" min="-2" pref="117" max="-2" attributes="0"/>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="caExtract" alignment="2" max="32767" attributes="0"/>
+                  <Component id="HelixCenter" alignment="2" max="32767" attributes="0"/>
+                  <Component id="bSheetCenter" alignment="2" max="32767" attributes="0"/>
+                  <Component id="Helix1" alignment="2" max="32767" attributes="0"/>
+                  <Component id="Helix2" alignment="2" max="32767" attributes="0"/>
+                  <Component id="AlignHelices" alignment="2" max="32767" attributes="0"/>
               </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace type="separate" max="32767" attributes="0"/>
-                      <Component id="OutputLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="OutputLabel" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="jScrollPane2" alignment="2" max="32767" attributes="0"/>
               </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="InputLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="OutputLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="caExtract" min="-2" pref="70" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="HelixCenter" min="-2" pref="70" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="bSheetCenter" min="-2" pref="70" max="-2" attributes="0"/>
-                      <EmptySpace pref="60" max="32767" attributes="0"/>
-                      <Component id="Helix1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="Helix2" min="-2" max="-2" attributes="0"/>
+                      <Component id="caExtract" pref="70" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <Component id="HelixCenter" pref="70" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <Component id="bSheetCenter" pref="70" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                      <Component id="Helix1" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <Component id="Helix2" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Component id="AlignHelices" min="-2" pref="70" max="-2" attributes="0"/>
+                      <Component id="AlignHelices" pref="70" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Component id="jScrollPane2" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -167,7 +160,7 @@
     </Container>
     <Component class="javax.swing.JButton" name="bSheetCenter">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Extract B-Sheet"/>
+        <Property name="text" type="java.lang.String" value="Reduced B-Strand"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bSheetCenterActionPerformed"/>
@@ -175,7 +168,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="HelixCenter">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Extract Helix"/>
+        <Property name="text" type="java.lang.String" value="Reduced Helix"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="HelixCenterActionPerformed"/>
