@@ -237,6 +237,7 @@ public class Interface extends javax.swing.JFrame {
                 OutputLabel.setText("Output File");
                 DisableButtons();
                 OutputTextArea.setText("");
+                AlignHelices.setEnabled(false);
                 caExtraction();
                 try {
                   writer = new BufferedWriter( new FileWriter( OutputFile.getAbsolutePath(), false ));
@@ -261,6 +262,7 @@ public class Interface extends javax.swing.JFrame {
                 OutputLabel.setText("Output File");
                 DisableButtons();
                 OutputTextArea.setText("");
+                AlignHelices.setEnabled(false);
                 bSheetExtraction();
                 try {
                   writer = new BufferedWriter( new FileWriter( OutputFile.getAbsolutePath(), false ));
@@ -285,6 +287,7 @@ public class Interface extends javax.swing.JFrame {
                 OutputLabel.setText("Output File");
                 DisableButtons();
                 OutputTextArea.setText("");
+                AlignHelices.setEnabled(false);
                 HelixExtraction();
                 try {
                   writer = new BufferedWriter( new FileWriter( OutputFile.getAbsolutePath(), false ));
